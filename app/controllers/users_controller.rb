@@ -16,9 +16,25 @@ class UsersController < ApplicationController
       def show
         @user = User.find_by(email: params[:id])
         if @user
-            render json: User.all.map{|user| {email: user.email}}
+            render json: {email: @user.mail }
         else
             render json: {message: "User not found"}
         end  
      end
+
+      def destroy
+        @user.destroy
+        if@user = User.find_by(email: params[:id])
+            render json: { message:"user deleted"}
+        else
+            render json: {message:"user not found"}
+        end
+    end
 end
+
+private
+  
+      def user_params
+        params.require(:user).permit(:email)
+        end
+ end
