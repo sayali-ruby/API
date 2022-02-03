@@ -1,7 +1,8 @@
-class ProfilesController < ApplicationController
+class V1::ProfilesController < ApplicationController
+  skip_before_action :verify_authenticity_token
 
   def index
-    render json: Profile.new.map{|profile| {first_name: profile.first_name,last_name: profile.last_name, age: profile.age, user_id: profile.user_id}}
+    render json: Profile.all.map{|profile| {first_name: profile.first_name,last_name: profile.last_name, age: profile.age, user_id: profile.user_id}}
   end
 
   def create
@@ -23,16 +24,18 @@ class ProfilesController < ApplicationController
   end
 
   def destroy
-    @profile = Profile.find_by (id: params[:id])
+    @profile = Profile.find_by(user_id: params[:id])
     if @profile.destroy
       render json: {message: "profile deleted"}
     else
       render json: {message: "profile not found"}
     end
   end
-end
 
-private
+  private
   def profile_params
     params.require(:profile).permit(:first_name,:last_name,:age,:user_id)
   end
+
+end
+

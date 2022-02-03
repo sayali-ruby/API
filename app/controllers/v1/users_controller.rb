@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class V1::UsersController < ApplicationController
 
     def index
         render json: User.all.map{|user| {email: user.email}}
@@ -30,11 +30,10 @@ class UsersController < ApplicationController
             render json: {message:"user not found"}
         end
     end
-end
-
-private
+    private
   
       def user_params
         params.require(:user).permit(:email)
         end
- end
+end
+
